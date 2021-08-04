@@ -83,7 +83,6 @@ var IonicDeployImpl = /** @class */ (function () {
         this.SNAPSHOT_CACHE = 'ionic_built_snapshots';
         this.MANIFEST_FILE = 'pro-manifest.json';
         this.PLUGIN_VERSION = '5.4.7';
-        // version update hooks
         this.hooks = new Hooks();
         this.appInfo = appInfo;
         this._savedPreferences = preferences;
@@ -522,7 +521,7 @@ var IonicDeployImpl = /** @class */ (function () {
                         return [4 /*yield*/, this.hooks.execPreInstallHook()];
                     case 7:
                         shouldReload = _a.sent();
-                        console.log("### IONIC: Should reload webview: " + shouldReload);
+                        console.log("Should reload webview: " + shouldReload);
                         if (shouldReload) {
                             newLocation = this.getSnapshotCacheDir(prefs.currentVersionId);
                             Ionic.WebView.setServerBasePath(newLocation);
@@ -838,7 +837,6 @@ var IonicDeployImpl = /** @class */ (function () {
     IonicDeployImpl.prototype.addPreInstallVersionHook = function (hook) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                console.log('CALLING HOOK 3');
                 this.hooks.addPreInstallHook(hook);
                 return [2 /*return*/];
             });
@@ -1158,9 +1156,7 @@ var IonicDeploy = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('CALLING HOOK 1');
                         if (!!this.disabled) return [3 /*break*/, 2];
-                        console.log('CALLING HOOK 2');
                         return [4 /*yield*/, this.delegate];
                     case 1: return [2 /*return*/, (_a.sent()).addPreInstallVersionHook(hook)];
                     case 2: return [2 /*return*/];
@@ -1221,8 +1217,6 @@ var Hooks = /** @class */ (function () {
         this.preInstallHook = null;
     }
     Hooks.prototype.addPreInstallHook = function (hookFn) {
-        console.log('CALLING HOOK 4');
-        console.log('### IONIC:  hook added');
         this.preInstallHook = hookFn;
     };
     Hooks.prototype.removePreInstallHook = function () {
@@ -1231,7 +1225,6 @@ var Hooks = /** @class */ (function () {
     Hooks.prototype.execPreInstallHook = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                console.log('### IONIC: hook executed!');
                 return [2 /*return*/, this.preInstallHook
                         ? this.preInstallHook()
                         : true];
