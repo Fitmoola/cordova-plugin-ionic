@@ -118,6 +118,8 @@ export interface DeployPluginAPI {
    *
    */
   getVersionById(versionId: string): Promise<ISnapshotInfo | undefined>;
+
+  addPreInstallVersionHook(hook: HookFunction): void;
 }
 
 /**
@@ -421,3 +423,5 @@ export interface IAppInfo {
  * A callback function to handle the result.
  */
 export interface CallbackFunction<T> { (result?: T): void; }
+
+export interface HookFunction { (): Promise<boolean> }

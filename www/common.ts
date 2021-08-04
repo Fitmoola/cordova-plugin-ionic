@@ -9,6 +9,7 @@ import {
   IPluginBaseAPI,
   ISnapshotInfo,
   ISyncOptions,
+  HookFunction,
 } from './IonicCordova';
 
 declare const cordova: Cordova;
@@ -71,6 +72,9 @@ class IonicDeployImpl {
   private SNAPSHOT_CACHE = 'ionic_built_snapshots';
   private MANIFEST_FILE = 'pro-manifest.json';
   public PLUGIN_VERSION = '5.4.7';
+
+  // version update hooks
+  private hooks = new Hooks();
 
   constructor(appInfo: IAppInfo, preferences: ISavedPreferences) {
     this.appInfo = appInfo;
@@ -355,10 +359,14 @@ class IonicDeployImpl {
         return false;
       }
 
-      // Reload the webview
-      const newLocation = this.getSnapshotCacheDir(prefs.currentVersionId);
-      Ionic.WebView.setServerBasePath(newLocation);
-      return true;
+      // Reload the webview if all pre install hooks returns true
+      const shouldReload = await this.hooks.execPreInstallHook();
+      console.log(`### IONIC: Should reload webview: ${shouldReload}`);
+      if (shouldReload) {
+        const newLocation = this.getSnapshotCacheDir(prefs.currentVersionId);
+        Ionic.WebView.setServerBasePath(newLocation);
+        return true;
+      }
     }
 
     channel.onIonicProReady.fire();
@@ -559,6 +567,12 @@ class IonicDeployImpl {
     }
     return;
   }
+
+  async addPreInstallVersionHook(hook: HookFunction) {
+    console.log('CALLING HOOK 3');
+
+    this.hooks.addPreInstallHook(hook);
+  }
 }
 
 class FileManager {
@@ -721,6 +735,15 @@ class IonicDeploy implements IDeployPluginAPI {
     if (!this.disabled) return (await this.delegate).sync(syncOptions, progress);
     return;
   }
+
+  async addPreInstallVersionHook(hook: HookFunction) {
+    console.log('CALLING HOOK 1');
+    if (!this.disabled) {
+      console.log('CALLING HOOK 2');
+      return (await this.delegate).addPreInstallVersionHook(hook);
+    }
+    return;
+  }
 }
 
 
@@ -777,6 +800,27 @@ class Timer {
   diff(message?: string) {
     console.log(`Message: ${message} Diff IonicTimer ${this.name} in ${(new Date().getTime() - this.lastTime.getTime()) / 1000} seconds.`);
     this.lastTime = new Date();
+  }
+}
+
+class Hooks {
+  private preInstallHook: HookFunction | null = null;
+
+  addPreInstallHook(hookFn: HookFunction) {
+    console.log('CALLING HOOK 4');
+    console.log('### IONIC:  hook added');
+    this.preInstallHook = hookFn;
+  }
+
+  removePreInstallHook() {
+    this.preInstallHook = null;
+  }
+
+  async execPreInstallHook(): Promise<boolean> {
+    console.log('### IONIC: hook executed!');
+    return this.preInstallHook
+      ? this.preInstallHook()
+      : true;
   }
 }
 

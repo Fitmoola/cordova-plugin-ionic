@@ -1,6 +1,7 @@
 import {
   CallbackFunction,
   CheckForUpdateResponse,
+  HookFunction,
   ICurrentConfig,
   IDeployConfig,
   ISnapshotInfo,
@@ -73,6 +74,11 @@ export class DeployClass implements IDeployPluginAPI {
   async getVersionById(versionId: string) {
     const deploy = await deviceready;
     return deploy.getVersionById(versionId);
+  }
+
+  async addPreInstallVersionHook(hook: HookFunction) {
+    const deploy = await deviceready;
+    return deploy.addPreInstallVersionHook(hook);
   }
 }
 
