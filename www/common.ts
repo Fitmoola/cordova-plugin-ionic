@@ -811,7 +811,6 @@ class Hooks {
   }
 
   async execPreInstallHook(): Promise<boolean> {
-    console.log('### IONIC: hook executed!');
     return this.preInstallHook
       ? this.preInstallHook()
       : true;
