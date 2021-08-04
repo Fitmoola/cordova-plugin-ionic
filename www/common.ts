@@ -73,7 +73,6 @@ class IonicDeployImpl {
   private MANIFEST_FILE = 'pro-manifest.json';
   public PLUGIN_VERSION = '5.4.7';
 
-  // version update hooks
   private hooks = new Hooks();
 
   constructor(appInfo: IAppInfo, preferences: ISavedPreferences) {
