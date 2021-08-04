@@ -361,7 +361,7 @@ class IonicDeployImpl {
 
       // Reload the webview if all pre install hooks returns true
       const shouldReload = await this.hooks.execPreInstallHook();
-      console.log(`### IONIC: Should reload webview: ${shouldReload}`);
+      console.log(`Should reload webview: ${shouldReload}`);
       if (shouldReload) {
         const newLocation = this.getSnapshotCacheDir(prefs.currentVersionId);
         Ionic.WebView.setServerBasePath(newLocation);
@@ -569,8 +569,6 @@ class IonicDeployImpl {
   }
 
   async addPreInstallVersionHook(hook: HookFunction) {
-    console.log('CALLING HOOK 3');
-
     this.hooks.addPreInstallHook(hook);
   }
 }
@@ -737,9 +735,7 @@ class IonicDeploy implements IDeployPluginAPI {
   }
 
   async addPreInstallVersionHook(hook: HookFunction) {
-    console.log('CALLING HOOK 1');
     if (!this.disabled) {
-      console.log('CALLING HOOK 2');
       return (await this.delegate).addPreInstallVersionHook(hook);
     }
     return;
@@ -807,8 +803,6 @@ class Hooks {
   private preInstallHook: HookFunction | null = null;
 
   addPreInstallHook(hookFn: HookFunction) {
-    console.log('CALLING HOOK 4');
-    console.log('### IONIC:  hook added');
     this.preInstallHook = hookFn;
   }
 
