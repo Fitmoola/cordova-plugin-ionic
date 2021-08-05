@@ -1,6 +1,7 @@
 node_modules/
 .DS_Store
-dist/
+# Do not ignore dist folder since this package (fork) is not published on any registry
+# dist/
 tmp/
 .idea/
 package-lock.json
