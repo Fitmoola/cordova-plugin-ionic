@@ -735,7 +735,13 @@ class IonicDeploy implements IDeployPluginAPI {
 
   async addPreInstallVersionHook(hook: HookFunction) {
     if (!this.disabled) {
-      return (await this.delegate).addPreInstallVersionHook(hook);
+      const currentDelegate = await this.delegate;
+
+      if (typeof currentDelegate.addPreInstallVersionHook === 'function') {
+        return currentDelegate.addPreInstallVersionHook(hook);
+      } else {
+        console.log('"IonicCordova: addPreInstallVersionHook" plugin API not available');
+      }
     }
     return;
   }
