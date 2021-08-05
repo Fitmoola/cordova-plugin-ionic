@@ -1153,21 +1153,12 @@ var IonicDeploy = /** @class */ (function () {
     };
     IonicDeploy.prototype.addPreInstallVersionHook = function (hook) {
         return __awaiter(this, void 0, void 0, function () {
-            var currentDelegate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!!this.disabled) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.delegate];
-                    case 1:
-                        currentDelegate = _a.sent();
-                        if (typeof currentDelegate.addPreInstallVersionHook === 'function') {
-                            return [2 /*return*/, currentDelegate.addPreInstallVersionHook(hook)];
-                        }
-                        else {
-                            console.log('"IonicCordova: addPreInstallVersionHook" plugin API not available');
-                        }
-                        _a.label = 2;
+                    case 1: return [2 /*return*/, (_a.sent()).addPreInstallVersionHook(hook)];
                     case 2: return [2 /*return*/];
                 }
             });
