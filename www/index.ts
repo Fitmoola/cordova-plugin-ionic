@@ -78,7 +78,11 @@ export class DeployClass implements IDeployPluginAPI {
 
   async addPreInstallVersionHook(hook: HookFunction) {
     const deploy = await deviceready;
-    return deploy.addPreInstallVersionHook(hook);
+    // Backwards compat: check if hooks API is available in Cordova plugin
+    if (typeof deploy.addPreInstallVersionHook === 'function') {
+      return deploy.addPreInstallVersionHook(hook);
+    }
+    console.log('"window.IonicCordova.deploy.addPreInstallVersionHook" plugin API not available');
   }
 }
 

@@ -200,7 +200,12 @@ var DeployClass = /** @class */ (function () {
                     case 0: return [4 /*yield*/, deviceready];
                     case 1:
                         deploy = _a.sent();
-                        return [2 /*return*/, deploy.addPreInstallVersionHook(hook)];
+                        // Backwards compat: check if hooks API is available in Cordova plugin
+                        if (typeof deploy.addPreInstallVersionHook === 'function') {
+                            return [2 /*return*/, deploy.addPreInstallVersionHook(hook)];
+                        }
+                        console.log('"window.IonicCordova.deploy.addPreInstallVersionHook" plugin API not available');
+                        return [2 /*return*/];
                 }
             });
         });
